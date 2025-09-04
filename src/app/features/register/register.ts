@@ -79,7 +79,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
         });
         this.registerForm.reset();
 
-        // Redirigir al login después de 2 segundos
         setTimeout(() => {
           this.router.navigate(['/login']);
         }, 2000);

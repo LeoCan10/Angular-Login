@@ -1,44 +1,60 @@
-import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, HostListener, Renderer2, OnInit, AfterViewInit } from '@angular/core';
 
 @Directive({
-  selector: '[appPasswordStrength]',
-  standalone: true
+  selector: '[appPasswordStrength]'
 })
-export class PasswordStrengthDirective {
-  private strengthEl: HTMLElement;
+export class PasswordStrengthDirective implements OnInit, AfterViewInit {
 
-  constructor(private el: ElementRef, private renderer: Renderer2) {
-    // Crear un elemento <span> debajo del input
-    this.strengthEl = this.renderer.createElement('span');
-    this.renderer.setStyle(this.strengthEl, 'fontSize', '12px');
-    this.renderer.setStyle(this.strengthEl, 'marginLeft', '5px');
-    this.renderer.setStyle(this.strengthEl, 'display', 'block');
-    this.renderer.appendChild(this.el.nativeElement.parentNode, this.strengthEl);
+  private element: HTMLElement | null = null;
+
+  constructor(private el: ElementRef, private renderer: Renderer2) {}
+
+  ngOnInit(): void {
+    // guardo referencia segura
+    this.element = this.el?.nativeElement ?? null;
+  }
+
+  ngAfterViewInit(): void {
+    // chequeo que el nodo exista antes de usarlo
+    if (!this.element) {
+      console.warn('PasswordStrengthDirective: no se encontró el elemento');
+      return;
+    }
   }
 
   @HostListener('input', ['$event'])
-  onInput(event: Event) {
-    const input = (event.target as HTMLInputElement).value;
-    const strength = this.getStrength(input);
+  onInput(event: Event): void {
+    if (!this.element) {
+      return;
+    }
 
-    let color = 'gray';
-    if (strength === 'Débil') color = 'red';
-    if (strength === 'Media') color = 'orange';
-    if (strength === 'Fuerte') color = 'green';
+    const input = event.target as HTMLInputElement;
+    if (!input || typeof input.value !== 'string') {
+      return;
+    }
 
-    this.renderer.setStyle(this.strengthEl, 'color', color);
-    this.strengthEl.textContent = `Fortaleza: ${strength}`;
+    const password = input.value;
+    const strength = this.calculateStrength(password);
+
+    // ejemplo: cambio el borde según la fuerza
+    if (strength === 'weak') {
+      this.renderer.setStyle(this.element, 'border', '2px solid red');
+    } else if (strength === 'medium') {
+      this.renderer.setStyle(this.element, 'border', '2px solid orange');
+    } else {
+      this.renderer.setStyle(this.element, 'border', '2px solid green');
+    }
   }
 
-  private getStrength(password: string): 'Débil' | 'Media' | 'Fuerte' {
+  private calculateStrength(password: string): 'weak' | 'medium' | 'strong' {
     let score = 0;
     if (password.length >= 6) score++;
     if (/[A-Z]/.test(password)) score++;
     if (/[0-9]/.test(password)) score++;
-    if (/[^A-Za-z0-9]/.test(password)) score++;
+    if (/[$@#&!]/.test(password)) score++;
 
-    if (score <= 1) return 'Débil';
-    if (score === 2) return 'Media';
-    return 'Fuerte';
+    if (score <= 1) return 'weak';
+    if (score === 2) return 'medium';
+    return 'strong';
   }
 }

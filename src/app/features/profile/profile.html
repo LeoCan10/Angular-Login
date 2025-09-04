@@ -2,11 +2,6 @@
   <mat-card>
     <h2>Editar Perfil</h2>
 
-    <div class="user-info" *ngIf="user">
-      <p><strong>ID:</strong> {{ user.id }}</p>
-      <p><strong>Miembro desde:</strong> {{ user.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
-    </div>
-
     <form [formGroup]="profileForm" (ngSubmit)="onSave()">
       <!-- Nombre -->
       <mat-form-field appearance="outline" class="field">

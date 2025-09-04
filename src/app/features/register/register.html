@@ -41,7 +41,7 @@
                 (click)="hidePassword = !hidePassword"
                 [attr.aria-label]="'Mostrar contraseña'"
                 [attr.aria-pressed]="!hidePassword">
-          {{ hidePassword}}
+          {{ hidePassword ? '👁️' : '🙈' }}
         </button>
         <mat-error *ngIf="registerForm.get('password')?.hasError('required')">
           La contraseña es obligatoria

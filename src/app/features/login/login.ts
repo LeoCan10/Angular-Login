@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule, NgIf } from '@angular/common';
-import { MatCardModule, MatCard } from '@angular/material/card';
-import { MatFormFieldModule, MatFormField, MatError, MatLabel } from '@angular/material/form-field';
-import { MatInputModule, MatInput } from '@angular/material/input';
-import { MatButtonModule, MatButton } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { Router, RouterModule, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
 
@@ -21,15 +21,8 @@ import { Subscription } from 'rxjs';
     MatInputModule,
     MatButtonModule,
     MatSnackBarModule,
-    NgIf,
-    RouterModule,
-      MatFormField,
-      MatCard,
-      MatError,
-      MatLabel,
-      MatInput,
-      MatButton,
-      RouterLink
+      RouterLink,
+      NgIf
 ],
   templateUrl: './login.html',
   styleUrl: './login.css'
