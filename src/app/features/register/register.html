@@ -1,45 +1,71 @@
-<mat-card>
-  <h2>Registro de Usuario</h2>
+<div class="page">
+  <mat-card>
+    <h2>Registro de Usuario</h2>
 
-  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    <!-- Nombre -->
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>Nombre</mat-label>
-      <input matInput formControlName="name" />
-      <mat-error *ngIf="registerForm.get('name')?.hasError('required')">
-        El nombre es obligatorio
-      </mat-error>
-    </mat-form-field>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <!-- Nombre -->
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Nombre completo</mat-label>
+        <input matInput formControlName="name" placeholder="Ingresa tu nombre" />
+        <mat-error *ngIf="registerForm.get('name')?.hasError('required')">
+          El nombre es obligatorio
+        </mat-error>
+        <mat-error *ngIf="registerForm.get('name')?.hasError('minlength')">
+          El nombre debe tener al menos 2 caracteres
+        </mat-error>
+      </mat-form-field>
 
-    <!-- Email -->
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>Email</mat-label>
-      <input matInput formControlName="email" />
-      <mat-error *ngIf="registerForm.get('email')?.hasError('required')">
-        El email es obligatorio
-      </mat-error>
-      <mat-error *ngIf="registerForm.get('email')?.hasError('email')">
-        Ingresa un email válido
-      </mat-error>
-    </mat-form-field>
+      <!-- Email -->
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" placeholder="ejemplo@email.com" />
+        <mat-error *ngIf="registerForm.get('email')?.hasError('required')">
+          El email es obligatorio
+        </mat-error>
+        <mat-error *ngIf="registerForm.get('email')?.hasError('email')">
+          Ingresa un email válido
+        </mat-error>
+      </mat-form-field>
 
-    <!-- Contraseña -->
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>Contraseña</mat-label>
-      <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" appPasswordStrength/>
-      <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
-        {{ hidePassword ? '👁️' : '🙈' }}
-      </button>
-      <mat-error *ngIf="registerForm.get('password')?.hasError('required')">
-        La contraseña es obligatoria
-      </mat-error>
-      <mat-error *ngIf="registerForm.get('password')?.hasError('minlength')">
-        Debe tener al menos 6 caracteres
-      </mat-error>
-    </mat-form-field>
+      <!-- Contraseña -->
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Contraseña</mat-label>
+        <input matInput
+               [type]="hidePassword ? 'password' : 'text'"
+               formControlName="password"
+               appPasswordStrength
+               placeholder="Mínimo 6 caracteres" />
+        <button mat-icon-button
+                matSuffix
+                type="button"
+                (click)="hidePassword = !hidePassword"
+                [attr.aria-label]="'Mostrar contraseña'"
+                [attr.aria-pressed]="!hidePassword">
+          {{ hidePassword ? '👁️' : '🙈' }}
+        </button>
+        <mat-error *ngIf="registerForm.get('password')?.hasError('required')">
+          La contraseña es obligatoria
+        </mat-error>
+        <mat-error *ngIf="registerForm.get('password')?.hasError('minlength')">
+          Debe tener al menos 6 caracteres
+        </mat-error>
+      </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit" [disabled]="!registerForm.valid">
-      Registrar
-    </button>
-  </form>
-</mat-card>
+      <div class="button-group">
+        <button mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="!registerForm.valid || isSubmitting">
+          {{ isSubmitting ? 'Registrando...' : 'Registrar' }}
+        </button>
+
+        <button mat-stroked-button
+                type="button"
+                (click)="goToLogin()"
+                [disabled]="isSubmitting">
+          Ya tienes cuenta? Inicia sesión
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>

@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule, NgIf } from '@angular/common';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule, NgIf, DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
 import { AuthService, User } from '../../services/auth.service';
 import { PasswordStrengthDirective } from "../../shared/password-strength";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -19,16 +21,20 @@ import { PasswordStrengthDirective } from "../../shared/password-strength";
     MatInputModule,
     MatButtonModule,
     MatSnackBarModule,
+    MatCardModule,
     NgIf,
-    PasswordStrengthDirective
-  ],
+    PasswordStrengthDirective,
+      DatePipe
+],
   templateUrl: './profile.html',
   styleUrl: './profile.css'
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
   user: User | null = null;
   profileForm!: FormGroup;
   hidePassword = true;
+  isSubmitting = false;
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private auth: AuthService,
@@ -37,7 +43,16 @@ export class ProfileComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.loadUserData();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+    console.log('ProfileComponent destroyed - cleaning up resources');
+  }
+
+  private loadUserData(): void {
     this.user = this.auth.getCurrentUser();
 
     if (!this.user) {
@@ -45,24 +60,64 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
+    this.initializeForm();
+  }
+
+  private initializeForm(): void {
     this.profileForm = this.fb.group({
-      name: [this.user.name, Validators.required],
-      email: [this.user.email, [Validators.required, Validators.email]],
-      password: [this.user.password, [Validators.required, Validators.minLength(6)]]
+      name: [this.user?.name || '', [Validators.required, Validators.minLength(2)]],
+      email: [this.user?.email || '', [Validators.required, Validators.email]],
+      password: [this.user?.password || '', [Validators.required, Validators.minLength(6)]]
     });
   }
 
-  onSave() {
-    if (this.profileForm.valid) {
-      const updatedUser = this.profileForm.value as User;
-      localStorage.setItem('auth_user', JSON.stringify(updatedUser));
-      localStorage.setItem('session', JSON.stringify(updatedUser));
-      this.snack.open('Perfil actualizado ✅', 'Cerrar', { duration: 3000 });
+  onSave(): void {
+    if (this.profileForm.valid && !this.isSubmitting && this.user) {
+      this.isSubmitting = true;
+
+      const updatedUser: User = {
+        ...this.user,
+        name: this.profileForm.value.name,
+        email: this.profileForm.value.email,
+        password: this.profileForm.value.password
+      };
+
+      const success = this.auth.updateUser(updatedUser);
+
+      if (success) {
+        this.user = updatedUser;
+        this.snack.open('Perfil actualizado correctamente ✅', 'Cerrar', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+      } else {
+        this.snack.open('Error: El email ya está en uso por otro usuario ❌', 'Cerrar', {
+          duration: 4000,
+          panelClass: ['error-snackbar']
+        });
+      }
+
+      this.isSubmitting = false;
     }
   }
 
-  logout() {
+  onReset(): void {
+    if (this.user) {
+      this.profileForm.patchValue({
+        name: this.user.name,
+        email: this.user.email,
+        password: this.user.password
+      });
+      this.snack.open('Formulario restaurado 🔄', 'Cerrar', { duration: 2000 });
+    }
+  }
+
+  logout(): void {
     this.auth.logout();
+    this.snack.open('Sesión cerrada correctamente 👋', 'Cerrar', {
+      duration: 2000,
+      panelClass: ['info-snackbar']
+    });
     this.router.navigate(['/login']);
   }
 }
