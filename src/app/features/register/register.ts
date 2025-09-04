@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule, NgIf } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule, MatCard } from '@angular/material/card';
+import { MatFormFieldModule, MatError, MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatInputModule, MatInput } from '@angular/material/input';
+import { MatButtonModule, MatIconButton, MatButton } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -24,8 +24,16 @@ import { Subscription } from 'rxjs';
     MatSnackBarModule,
     NgIf,
     PasswordStrengthDirective,
-    RouterModule
-  ],
+    RouterModule,
+      MatError,
+      MatFormField,
+      MatLabel,
+      MatInput,
+      MatCard,
+      MatSuffix,
+      MatIconButton,
+      MatButton
+],
   templateUrl: './register.html',
   styleUrl: './register.css'
 })
@@ -47,7 +55,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Limpiar subscripciones para evitar memory leaks
+    // Limpiar suscripciones para evitar memory leaks
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 

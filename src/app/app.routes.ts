@@ -4,11 +4,6 @@ import { guestGuard } from './services/guest.guard';
 
 export const routes: Routes = [
   {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
-  },
-  {
     path: 'register',
     loadComponent: () =>
       import('./features/register/register').then(m => m.RegisterComponent),

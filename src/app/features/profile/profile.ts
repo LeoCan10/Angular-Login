@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule, NgIf, DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule, MatIconButton, MatButton } from '@angular/material/button';
+import { MatFormFieldModule, MatFormField, MatError, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatInputModule, MatInput } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatCardModule } from '@angular/material/card';
+import { MatCardModule, MatCard } from '@angular/material/card';
 import { Router } from '@angular/router';
 import { AuthService, User } from '../../services/auth.service';
 import { PasswordStrengthDirective } from "../../shared/password-strength";
@@ -24,7 +24,15 @@ import { Subscription } from 'rxjs';
     MatCardModule,
     NgIf,
     PasswordStrengthDirective,
-      DatePipe
+      DatePipe,
+      MatCard,
+      MatFormField,
+      MatError,
+      MatLabel,
+      MatInput,
+      MatIconButton,
+      MatSuffix,
+      MatButton
 ],
   templateUrl: './profile.html',
   styleUrl: './profile.css'

@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule, NgIf } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule, MatCard } from '@angular/material/card';
+import { MatFormFieldModule, MatFormField, MatError, MatLabel } from '@angular/material/form-field';
+import { MatInputModule, MatInput } from '@angular/material/input';
+import { MatButtonModule, MatButton } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -22,8 +22,14 @@ import { Subscription } from 'rxjs';
     MatButtonModule,
     MatSnackBarModule,
     NgIf,
-    RouterModule
-  ],
+    RouterModule,
+      MatFormField,
+      MatCard,
+      MatError,
+      MatLabel,
+      MatInput,
+      MatButton
+],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
@@ -80,6 +86,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   goToRegister(): void {
-    this.router.navigate(['../register']);
+    this.router.navigate(['/register']);
   }
 }
