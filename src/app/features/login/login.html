@@ -40,7 +40,7 @@
 
         <button mat-stroked-button
                 type="button"
-                (click)="goToRegister()"
+                [routerLink]="['/register']"
                 [disabled]="isSubmitting">
           ¿No tienes cuenta? Regístrate
         </button>

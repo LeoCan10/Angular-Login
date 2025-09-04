@@ -126,10 +126,4 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.sessionKey);
   }
-
-  // Limpiar todos los datos (útil para desarrollo)
-  clearAllData(): void {
-    localStorage.removeItem(this.usersKey);
-    localStorage.removeItem(this.sessionKey);
-  }
 }

@@ -6,7 +6,7 @@ import { MatFormFieldModule, MatFormField, MatError, MatLabel } from '@angular/m
 import { MatInputModule, MatInput } from '@angular/material/input';
 import { MatButtonModule, MatButton } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
 
@@ -28,7 +28,8 @@ import { Subscription } from 'rxjs';
       MatError,
       MatLabel,
       MatInput,
-      MatButton
+      MatButton,
+      RouterLink
 ],
   templateUrl: './login.html',
   styleUrl: './login.css'
@@ -71,21 +72,15 @@ export class LoginComponent implements OnInit, OnDestroy {
         const user = this.auth.getCurrentUser();
         this.snack.open(`¡Bienvenido ${user?.name}! 👋`, 'Cerrar', {
           duration: 3000,
-          panelClass: ['success-snackbar']
         });
         this.router.navigate(['/profile']);
       } else {
         this.snack.open('Credenciales incorrectas ❌', 'Cerrar', {
           duration: 3000,
-          panelClass: ['error-snackbar']
         });
       }
 
       this.isSubmitting = false;
     }
-  }
-
-  goToRegister(): void {
-    this.router.navigate(['/register']);
   }
 }

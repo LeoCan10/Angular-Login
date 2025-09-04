@@ -55,7 +55,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Limpiar suscripciones para evitar memory leaks
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
