@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule, NgIf, DatePipe } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule, MatIconButton, MatButton } from '@angular/material/button';
 import { MatFormFieldModule, MatFormField, MatError, MatLabel, MatSuffix } from '@angular/material/form-field';
@@ -24,7 +24,6 @@ import { Subscription } from 'rxjs';
     MatCardModule,
     NgIf,
     PasswordStrengthDirective,
-      DatePipe,
       MatCard,
       MatFormField,
       MatError,
@@ -53,11 +52,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadUserData();
+    console.log("Perfil Inicializado");
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
-    console.log('ProfileComponent destroyed - cleaning up resources');
+    console.log("Perfil Destruido");
   }
 
   private loadUserData(): void {

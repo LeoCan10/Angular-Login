@@ -67,31 +67,33 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    if (this.registerForm.valid && !this.isSubmitting) {
-      this.isSubmitting = true;
+  if (this.registerForm.valid && !this.isSubmitting) {
+    this.isSubmitting = true;
 
-      const success = this.auth.register(this.registerForm.value);
+    const success = this.auth.register(this.registerForm.value);
 
-      if (success) {
-        this.snack.open('Usuario registrado con éxito ✅', 'Cerrar', {
-          duration: 3000,
-          panelClass: ['success-snackbar']
-        });
+    if (success) {
+      this.snack.open('Usuario registrado con éxito ✅', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['success-snackbar']
+      });
+
+      setTimeout(() => {
         this.registerForm.reset();
+        this.router.navigate(['/login']);
+        this.isSubmitting = false;
+      }, 2000);
 
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 2000);
-      } else {
-        this.snack.open('El email ya está registrado ❌', 'Cerrar', {
-          duration: 3000,
-          panelClass: ['error-snackbar']
-        });
-      }
-
+    } else {
+      this.snack.open('El email ya está registrado ❌', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
       this.isSubmitting = false;
     }
   }
+}
+
 
   goToLogin(): void {
     this.router.navigate(['/login']);
